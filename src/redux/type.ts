@@ -2,6 +2,29 @@ export const ADD_BOOKS = "ADD_BOOKS";
 export const DELETE_BOOKS = "DELETE_BOOKS";
 export const DELETE_ALL_BOOKS = "DELETE_ALL_BOOKS";
 
+interface AddBooksAction {
+  type: typeof ADD_BOOKS;
+  payload: {
+    title: string;
+    author: string;
+  }
+}
+
+interface DeleteBooksAction {
+  type: typeof DELETE_BOOKS;
+  payload: string;
+}
+
+interface DeleteAllBooksAction {
+  type: typeof DELETE_ALL_BOOKS;
+}
+
+export type BooksAction =
+  | AddBooksAction
+  | DeleteBooksAction
+  | DeleteAllBooksAction;
+
+
 // Fetch API
 export interface SearchState {
   isLoading: boolean;

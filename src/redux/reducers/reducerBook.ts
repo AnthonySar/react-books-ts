@@ -1,4 +1,4 @@
-import { ADD_BOOKS, DELETE_ALL_BOOKS, DELETE_BOOKS } from "../type";
+import { ADD_BOOKS, BooksAction, DELETE_ALL_BOOKS, DELETE_BOOKS } from "../type";
 import { v4 as uuidv4 } from "uuid";
 
 interface Book {
@@ -15,12 +15,15 @@ const initialState: State = {
   books: [],
 };
 
-const helperAddData = (action: any): Book => {
-  return {
-    id: uuidv4(),
-    title: action.payload.title,
-    author: action.payload.author,
-  };
+const helperAddData = (action: BooksAction): Book | null => {
+  if (action.type === ADD_BOOKS && action.payload) {
+    return {
+      id: uuidv4(),
+      title: action.payload.title,
+      author: action.payload.author,
+    };
+  }
+  return null;
 };
 
 const helperDeleteData = (state: Book[], id: string): Book[] => {
@@ -29,7 +32,7 @@ const helperDeleteData = (state: Book[], id: string): Book[] => {
 };
 
 // Reducer
-const addBooksReducer = (state: Book[] = initialState.books, action: any) => {
+const addBooksReducer = (state: Book[] = initialState.books, action: BooksAction) => {
   // On vérifie si on à déjà la data en localStorage ou non
   const booksData = localStorage.getItem("booksData");
   if (typeof booksData === "string") {
@@ -38,12 +41,17 @@ const addBooksReducer = (state: Book[] = initialState.books, action: any) => {
 
   switch (action.type) {
     case ADD_BOOKS:
+      // On caps et check si on à qqchose à traiter
+      const newBook = helperAddData(action);
+
       // Spread operator pour récupéré ce qui nous intéresse
       // On passe l'action au niveau de helperAddData pour récupéré les datas
-      state = [...state, helperAddData(action)];
+      if (newBook) {
+        state = [...state, newBook];
 
-      // On Enregistre une copie de la data en localStorage
-      localStorage.setItem("booksData", JSON.stringify(state));
+        // On Enregistre une copie de la data en localStorage
+        localStorage.setItem("booksData", JSON.stringify(state));
+      }
 
       return state;
 

@@ -27,7 +27,7 @@ const AddBooks: FC<BooksProps> = () => {
     setNewData(initialState);
   }
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     dispatch(deleteBook(id));
   }
 
