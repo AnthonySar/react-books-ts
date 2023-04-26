@@ -1,7 +1,7 @@
 import { ADD_BOOKS, BooksAction, DELETE_ALL_BOOKS, DELETE_BOOKS } from "../type";
 import { v4 as uuidv4 } from "uuid";
 
-interface Book {
+export interface Book {
   id: string;
   title: string;
   author: string;

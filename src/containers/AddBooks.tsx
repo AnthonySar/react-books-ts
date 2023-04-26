@@ -2,6 +2,7 @@ import { FC, FormEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { addBook, deleteAllBook, deleteBook } from '../redux/actions/actionBooks';
+import { Book } from '../redux/reducers/reducerBook';
 
 interface BooksProps {
   title?: string;
@@ -16,7 +17,7 @@ const AddBooks: FC<BooksProps> = () => {
   
   const [newData, setNewData] = useState<BooksProps>(initialState);
 
-  const libraryData: any[] = useSelector((state: RootState) => state.library);
+  const libraryData: Book[] = useSelector((state: RootState) => state.library);
 
   const dispatch = useDispatch();
 
