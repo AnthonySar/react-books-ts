@@ -7,13 +7,8 @@ import { addBook } from '../redux/actions/actionBooks';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Accordion from "react-bootstrap/Accordion";
+import { ApiBook } from '../redux/type';
 
-interface Data {
-  id: number;
-  title: string;
-  author: string;
-  description: string;
-}
 
 const SearchBooks = () => {
   const [title, setTitle] = useState<string>('');
@@ -45,7 +40,6 @@ const SearchBooks = () => {
     });
   }
 
-
   const displayFetchBooks = searchResult.isLoading ? (
     <div className="d-flex justify-content-center">
       <div className="spinner-border text-info" role="status"></div>
@@ -53,26 +47,26 @@ const SearchBooks = () => {
   ) : searchResult.error !== "" ? (
     <p>{searchResult.error}</p>
   ) : (
-    searchResult.fetchedBooks.map((data: any) => {
-
+    searchResult.fetchedBooks.map((data: object) => {
+      const book = data as ApiBook;
       return (
-        <Accordion.Item eventKey={data.id}>
-          <Accordion.Header>{data.volumeInfo.title}</Accordion.Header>
+        <Accordion.Item eventKey={book.id} key={book.id}>
+          <Accordion.Header>{book.volumeInfo.title}</Accordion.Header>
           <Accordion.Body>
-            {data.volumeInfo.hasOwnProperty("imageLinks") ? (
+            {book.volumeInfo.imageLinks ? (
               <img
-                src={data.volumeInfo.imageLinks.thumbnail}
-                alt={data.volumeInfo.title}
+                src={book.volumeInfo.imageLinks.thumbnail}
+                alt={book.volumeInfo.title}
               />
             ) : (
               ""
             )}
             <hr />
-            <h3>{data.volumeInfo.title}</h3>
-            <h4>{data.volumeInfo.authors}</h4>
+            <h3>{book.volumeInfo.title}</h3>
+            <h4>{book.volumeInfo.authors}</h4>
             <hr />
-            {data.volumeInfo.description ? (
-              <p>{data.volumeInfo.description}</p>
+            {book.volumeInfo.description ? (
+              <p>{book.volumeInfo.description}</p>
             ) : (
               ""
             )}
@@ -80,14 +74,14 @@ const SearchBooks = () => {
               className="btn btn-outline-secondary m-1"
               target="_blank"
               rel="noopener noreferrer"
-              href={data.volumeInfo.previewLink}
+              href={book.volumeInfo.previewLink}
             >
               Plus d'infos
             </a>
             <button
               className="btn btn-outline-secondary m-1"
               onClick={() => {
-                handleSave(data.volumeInfo.title, data.volumeInfo.authors);
+                handleSave(book.volumeInfo.title, book.volumeInfo.authors.join(', '));
               }}
             >
               Ajouter à la collection

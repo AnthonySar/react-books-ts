@@ -1,4 +1,4 @@
-import { FETCH_BOOKS_LOADING, FETCH_BOOKS_SUCCESS, FETCH_BOOKS_ERROR } from '../type';
+import { FETCH_BOOKS_LOADING, FETCH_BOOKS_SUCCESS, FETCH_BOOKS_ERROR, ApiBook } from '../type';
 import axios from 'axios';
 import { AppDispatch } from '../store';
 
@@ -22,14 +22,20 @@ const fetchBooksError = (error: string) => {
   }  
 };
 
-export const fetchBooks = (title: string): any => {
-  return (dispatch: AppDispatch) => {
+export const fetchBooks = (title: string) => {
+  return async (dispatch: AppDispatch) => {
     dispatch(fetchBooksLoading());
 
     return axios.get(`https://www.googleapis.com/books/v1/volumes?q=${title}&maxResults=20`)
       .then((response) => {
         const booksItemArray = response.data.items;
-        dispatch(fetchBooksSuccess(booksItemArray));
+        // On éxècute un premier map pour fetch les données qui nous intéresse
+        // Celle qu'on à stocker dans notre interface ApiBook
+        const books: ApiBook[] = booksItemArray.map((item: ApiBook) => ({
+          id: item.id,
+          volumeInfo: item.volumeInfo
+        }))
+        dispatch(fetchBooksSuccess(books));
       })
       .catch((error) => {
         dispatch(fetchBooksError(error.message));

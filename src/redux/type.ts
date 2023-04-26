@@ -9,6 +9,19 @@ export interface SearchState {
   fetchedBooks: object[];
 }
 
+export interface ApiBook {
+  id: string;
+  volumeInfo: {
+    title: string;
+    authors: string[];
+    description?: string;
+    previewLink: string;
+    imageLinks?: {
+      thumbnail: string;
+    }
+  }
+}
+
 export const FETCH_BOOKS_LOADING = "FETCH_BOOKS_LOADING";
 export const FETCH_BOOKS_SUCCESS = "FETCH_BOOKS_SUCCESS";
 export const FETCH_BOOKS_ERROR = "FETCH_BOOKS_ERROR";
